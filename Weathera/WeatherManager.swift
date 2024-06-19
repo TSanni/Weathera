@@ -15,7 +15,22 @@ protocol WeatherManagerDelegate {
 
 struct WeatherManager {
     let weatherURL = "https://api.openweathermap.org/data/2.5/weather?units=metric&appid="
-    let apiKey = Bundle.main.object(forInfoDictionaryKey: "ApiKey") as? String
+    
+    var apiKey: String? {
+        get {
+            if let path = Bundle.main.path(forResource: "Keys", ofType: "plist"),
+               let xml = FileManager.default.contents(atPath: path),
+               let keyDict = try? PropertyListSerialization.propertyList(from: xml, options: .mutableContainersAndLeaves, format: nil) as? [String: Any],
+               let apiKey = keyDict["apikey"] as? String {
+                return apiKey
+            } else {
+                fatalError("API Key not found in Keys.plist")
+            }
+        }
+    }
+    
+    
+//    let apiKey = Bundle.main.object(forInfoDictionaryKey: "apikey") as? String
     var delegate: WeatherManagerDelegate?
     
     func fetchWeather(cityName: String) {
