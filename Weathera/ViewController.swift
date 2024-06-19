@@ -50,7 +50,15 @@ class ViewController: UIViewController {
         configureConditionImage()
         configureTemperatureHStack()
         configureCityLabelAndSpacer()
+        
+        // Add tap gesture recognizer to the view
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
     }
+    
+    @objc func dismissKeyboard() {
+         view.endEditing(true)
+     }
     
     func configureVStack() {
         let backgroundImage = UIImageView(frame: view.bounds)
@@ -82,6 +90,8 @@ class ViewController: UIViewController {
     @objc func locationButtonPressed(button: UIButton) {
         locationManager.startUpdatingLocation()
     }
+    
+
     
     func configureTopHStack() {
         
